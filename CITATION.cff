@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+title: "Proof-Carrying Autonomy (PCA) / Certified Agentic Execution (CAE)"
+message: "If you use this repository, please cite it using the metadata below."
+type: software
+authors:
+  - family-names: "LESZO"
+    given-names: "ARKADIUSZ"
+    affiliation: "Owner"
+repository-code: "https://example.com/pca-spec"
+license: "Apache-2.0 AND CC-BY-4.0"
+version: "1.0.0"
+date-released: 2026-02-17
+abstract: "Public prior-art disclosure and technical standard package for Proof-Carrying Autonomy / Certified Agentic Execution."
+keywords:
+  - autonomy
+  - certification
+  - agentic execution
+  - formal constraints
+  - provenance
+identifiers:
+  - type: doi
+    value: "10.0000/placeholder-doi"
+    description: "Replace with Zenodo DOI after archival release."

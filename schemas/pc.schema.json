@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/pc.schema.json",
+  "title": "PCA Plan Certificate",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "pc_version",
+    "pc_id",
+    "issued_at",
+    "planner_id",
+    "constraints_version_id",
+    "constraints_digest",
+    "effective_time",
+    "plan_digest",
+    "steps",
+    "nonce"
+  ],
+  "properties": {
+    "pc_version": {"type": "string", "const": "1.0"},
+    "pc_id": {"type": "string"},
+    "issued_at": {"type": "string", "format": "date-time"},
+    "planner_id": {"type": "string"},
+    "constraints_version_id": {"type": "string"},
+    "constraints_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "effective_time": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["not_before", "not_after"],
+      "properties": {
+        "not_before": {"type": "string", "format": "date-time"},
+        "not_after": {"type": "string", "format": "date-time"}
+      }
+    },
+    "plan_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "merkle_root": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "steps": {
+      "type": "array",
+      "items": {"$ref": "action_ir.schema.json"}
+    },
+    "nonce": {"type": "string"},
+    "metadata": {"type": "object", "additionalProperties": true},
+    "signature": {"type": "string"}
+  }
+}

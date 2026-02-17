@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/constraints.schema.json",
+  "title": "PCA Constraints",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["version_id", "effective_time", "payload", "digest"],
+  "properties": {
+    "version_id": {"type": "string", "minLength": 1},
+    "effective_time": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["not_before", "not_after"],
+      "properties": {
+        "not_before": {"type": "string", "format": "date-time"},
+        "not_after": {"type": "string", "format": "date-time"}
+      }
+    },
+    "payload": {"type": "object", "additionalProperties": true},
+    "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

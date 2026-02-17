@@ -1,0 +1,27 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.org/schemas/evidence_capsule.schema.json",
+  "title": "PCA Evidence Capsule",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["capsule_version", "proofs"],
+  "properties": {
+    "capsule_version": {"type": "string", "const": "1.0"},
+    "proofs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["type", "digest"],
+        "properties": {
+          "type": {"type": "string"},
+          "digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+          "uri": {"type": "string"}
+        }
+      }
+    },
+    "legal_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "attestation_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "test_suite_digest": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

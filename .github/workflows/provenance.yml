@@ -1,0 +1,26 @@
+name: Provenance
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  provenance:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - name: Create SHA256SUMS fallback
+        run: |
+          find spec schemas reference test-vectors -type f -print0 | sort -z | xargs -0 sha256sum > SHA256SUMS
+      - name: Upload checksum artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: provenance-sha256sums
+          path: SHA256SUMS
+      - name: Sigstore note
+        run: |
+          echo "If Sigstore is enabled in this environment, sign release artifacts and attach attestations."

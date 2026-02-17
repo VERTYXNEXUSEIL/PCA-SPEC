@@ -1,0 +1,42 @@
+{
+  "test_id": "T5_toctou",
+  "pc": {
+    "pc_version": "1.0",
+    "pc_id": "pc-001",
+    "issued_at": "2026-02-17T00:00:00Z",
+    "planner_id": "planner.ref",
+    "constraints_version_id": "cons-v1",
+    "constraints_digest": "a6e9c460a6f6d9bda9b3b2e6d909437a32b7629dede0e897bc382a24d86b499e",
+    "effective_time": {
+      "not_before": "2026-02-17T00:00:00Z",
+      "not_after": "2026-12-31T23:59:59Z"
+    },
+    "plan_digest": "315737b5a8f57672f3f5267dfbacf5f2e36f0b06a11ff65f14afeb8b9de53f84",
+    "merkle_root": "8e827557cf8fd8e8426946ca173100a7da6af3a30ebb95aa8ba3f1fd518e2aad",
+    "steps": [
+      {
+        "action_type": "transfer",
+        "parameters": {
+          "to": "B2",
+          "amount": 5
+        },
+        "required_capabilities": [
+          "ledger.write"
+        ]
+      }
+    ],
+    "nonce": "T5_toctou-nonce"
+  },
+  "runtime": {
+    "expected_pc_digest": "7a1c7ed345f99bde444ab5278f4333ba89d03020196901833c643a91154d75ca",
+    "constraints_version_id": "cons-v1",
+    "constraints_digest": "a6e9c460a6f6d9bda9b3b2e6d909437a32b7629dede0e897bc382a24d86b499e",
+    "now": "2026-03-01T00:00:00Z",
+    "toctou_drift": true
+  },
+  "expected": {
+    "decision": "FALLBACK",
+    "reason_code": "RC_TOCTOU"
+  },
+  "expected_pc_digest": "7a1c7ed345f99bde444ab5278f4333ba89d03020196901833c643a91154d75ca"
+}

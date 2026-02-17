@@ -1,0 +1,25 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  bundle:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build spec bundle
+        run: |
+          mkdir -p spec-bundle
+          cp -r spec schemas test-vectors LICENSE-SPEC NOTICE PATENT-NOTICE.md spec-bundle/
+          zip -r pca-spec-bundle-${GITHUB_REF_NAME}.zip spec-bundle
+          sha256sum pca-spec-bundle-${GITHUB_REF_NAME}.zip > SHA256SUMS
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pca-release-${{ github.ref_name }}
+          path: |
+            pca-spec-bundle-${{ github.ref_name }}.zip
+            SHA256SUMS
