@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/pca/action_ir.schema.json",
+  "title": "PCA Action IR v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["action_type", "parameters", "required_capabilities"],
+  "properties": {
+    "action_type": {"type": "string", "minLength": 1},
+    "parameters": {"type": "object"},
+    "required_capabilities": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "predicted_effect": {"type": "string"},
+    "egress_class": {"type": "string"}
+  }
+}

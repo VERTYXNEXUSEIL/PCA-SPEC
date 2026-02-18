@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+title: "Proof-Carrying Autonomy (PCA) / Certified Agentic Execution (CAE)"
+message: "Please cite this repository when using PCA/CAE materials."
+type: software
+authors:
+  - family-names: "LESZO"
+    given-names: "ARKADIUSZ"
+version: "1.0.0"
+date-released: "YYYY-MM-DD"
+repository-code: "https://example.invalid/pca-spec"
+identifiers:
+  - type: doi
+    value: "10.0000/placeholder"
+license: "Apache-2.0 AND CC-BY-4.0"

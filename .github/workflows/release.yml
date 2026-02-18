@@ -1,0 +1,26 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  package:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build release artifacts
+        run: |
+          mkdir -p dist
+          tmp="dist/pca-spec-${GITHUB_REF_NAME}"
+          rm -rf "$tmp"
+          mkdir -p "$tmp"
+          cp -r spec schemas test-vectors reference README.md LICENSE-CODE LICENSE-SPEC NOTICE PATENT-NOTICE.md "$tmp"/
+          (cd dist && zip -r pca-spec-${GITHUB_REF_NAME}.zip pca-spec-${GITHUB_REF_NAME})
+          (cd dist && sha256sum pca-spec-${GITHUB_REF_NAME}.zip > SHA256SUMS)
+      - name: Upload build artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pca-release-${{ github.ref_name }}
+          path: dist/

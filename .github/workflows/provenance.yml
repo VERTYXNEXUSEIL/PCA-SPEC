@@ -1,0 +1,27 @@
+name: Provenance
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  provenance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build info and checksums
+        run: |
+          mkdir -p dist
+          find spec schemas reference test-vectors -type f -print0 | sort -z | xargs -0 sha256sum > dist/SHA256SUMS
+          {
+            echo "commit=${GITHUB_SHA}"
+            echo "ref=${GITHUB_REF}"
+            echo "run_id=${GITHUB_RUN_ID}"
+            echo "generated_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          } > dist/BUILD-PROVENANCE.txt
+      - name: Upload provenance artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: provenance
+          path: dist/
