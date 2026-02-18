@@ -1,4 +1,4 @@
-# pca-spec
+# PCA-SPEC
 
 Proof-Carrying Autonomy (PCA) / Certified Agentic Execution (CAE) is a product-neutral technical standard and implementation package for deterministic, certifiable autonomous action execution.
 
