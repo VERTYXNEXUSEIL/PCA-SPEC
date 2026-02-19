@@ -18,7 +18,11 @@ def load_vector(path: Path) -> dict:
 
 def test_vector_decisions_and_digests() -> None:
     seen: set[str] = set()
-    for path in sorted(VECTORS.glob("T*.json")):
+    vector_paths = sorted(VECTORS.glob("T*.json"))
+    vector_ids = {path.stem for path in vector_paths}
+    assert "T13_cross_impl_determinism" in vector_ids
+
+    for path in vector_paths:
         vec = load_vector(path)
         assert build_pc_digest(vec["pc"]) == vec["expected_pc_digest"]
 
@@ -56,3 +60,34 @@ def test_schema_validation() -> None:
         },
         "evidence_capsule.schema.json",
     )
+
+
+def test_schema_regression_additional_properties_pattern_and_ref() -> None:
+    vec = load_vector(VECTORS / "T10_brs_gate.json")
+
+    pc_extra = json.loads(json.dumps(vec["pc"]))
+    pc_extra["unexpected"] = True
+    try:
+        validate(pc_extra, "pc.schema.json")
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("Expected additionalProperties=false validation failure")
+
+    pc_bad_pattern = json.loads(json.dumps(vec["pc"]))
+    pc_bad_pattern["constraints_digest"] = "invalid-digest"
+    try:
+        validate(pc_bad_pattern, "pc.schema.json")
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("Expected pattern validation failure")
+
+    pc_bad_ref = json.loads(json.dumps(vec["pc"]))
+    pc_bad_ref["steps"][0]["required_capabilities"] = "not-an-array"
+    try:
+        validate(pc_bad_ref, "pc.schema.json")
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("Expected $ref validation failure for action_ir schema")

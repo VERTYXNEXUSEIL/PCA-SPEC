@@ -1,103 +1,141 @@
 #!/usr/bin/env python3
-"""Run project health checks with a clear PASS/FAIL summary."""
-
 from __future__ import annotations
 
-import os
-import shutil
+import json
 import subprocess
 import sys
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
-
-
-@dataclass
-class Step:
-    name: str
-    cmd: list[str]
-    cwd: Path = ROOT
-    env: dict[str, str] = field(default_factory=dict)
-    optional: bool = False
-    skip_reason: str = ""
+VECTORS_DIR = ROOT / "test-vectors" / "vectors-v1"
+PYTHON_DIR = ROOT / "reference" / "python"
 
 
 @dataclass
 class StepResult:
-    step: Step
+    name: str
     status: str
-    returncode: int
+    detail: str
 
 
-def run_step(step: Step) -> StepResult:
-    if step.optional and step.skip_reason:
-        print(f"\n--- {step.name} ---")
-        print(f"SKIP: {step.skip_reason}")
-        return StepResult(step=step, status="SKIP", returncode=0)
+def _run_subprocess(name: str, cmd: list[str], cwd: Path) -> None:
+    print(f"\n▶ {name}: {' '.join(cmd)}")
+    completed = subprocess.run(cmd, cwd=cwd, check=False)
+    if completed.returncode != 0:
+        raise RuntimeError(f"{name} failed with exit code {completed.returncode}")
 
-    print(f"\n--- {step.name} ---")
-    print(f"$ {' '.join(step.cmd)}")
-    env = os.environ.copy()
-    env.update(step.env)
-    completed = subprocess.run(step.cmd, cwd=step.cwd, env=env)
-    status = "PASS" if completed.returncode == 0 else "FAIL"
-    return StepResult(step=step, status=status, returncode=completed.returncode)
+
+def validate_schemas() -> str:
+    sys.path.insert(0, str(PYTHON_DIR))
+    from pca.schemas import validate  # noqa: PLC0415
+
+    count = 0
+    for path in sorted(VECTORS_DIR.glob("T*.json")):
+        vec = json.loads(path.read_text(encoding="utf-8"))
+        validate(vec["pc"], "pc.schema.json")
+        validate(vec["pc"]["steps"][0], "action_ir.schema.json")
+        validate(
+            {
+                "version_id": vec["pc"]["constraints_version_id"],
+                "effective_time": vec["pc"]["effective_time"],
+                "payload": {"allow": ["transfer"]},
+                "digest": vec["pc"]["constraints_digest"],
+            },
+            "constraints.schema.json",
+        )
+        validate(
+            {
+                "capsule_version": "1.0",
+                "proofs": [{"type": "test", "digest": vec["expected_pc_digest"]}],
+            },
+            "evidence_capsule.schema.json",
+        )
+        count += 1
+    return f"validated schema compatibility for {count} vectors"
+
+
+def run_vectors() -> str:
+    sys.path.insert(0, str(PYTHON_DIR))
+    from pca.execute import execute_certified  # noqa: PLC0415
+
+    seen: set[str] = set()
+    count = 0
+    for path in sorted(VECTORS_DIR.glob("T*.json")):
+        vec = json.loads(path.read_text(encoding="utf-8"))
+        expected = vec["expected"]
+
+        if vec.get("replay"):
+            _ = execute_certified(vec["pc"], vec["runtime"], seen)
+
+        if vec["test_id"] == "T4_reason_stability":
+            out1 = execute_certified(vec["pc"], vec["runtime"], set())
+            out2 = execute_certified(vec["pc"], vec["runtime"], set())
+            if out1 != expected or out2 != expected:
+                raise RuntimeError(f"{vec['test_id']} mismatch: out1={out1}, out2={out2}, expected={expected}")
+        else:
+            out = execute_certified(vec["pc"], vec["runtime"], seen)
+            if out != expected:
+                raise RuntimeError(f"{vec['test_id']} mismatch: got {out}, expected {expected}")
+
+        count += 1
+    return f"{count} vectors matched expected outcomes"
+def run_pytest() -> str:
+    _run_subprocess("pytest", ["pytest", "-q"], PYTHON_DIR)
+    return "pytest passed"
+
+
+def run_ruff() -> str:
+    _run_subprocess("ruff", ["ruff", "check", "."], PYTHON_DIR)
+    return "ruff passed"
+
+
+def run_node_t13_check() -> str:
+    package_json = ROOT / "reference" / "node" / "package.json"
+    if not package_json.exists():
+        return "skipped (reference/node/package.json not found)"
+
+    package = json.loads(package_json.read_text(encoding="utf-8"))
+    scripts = package.get("scripts", {})
+    if "t13:check" not in scripts:
+        return "skipped (npm script t13:check not defined)"
+
+    _run_subprocess("node-t13-check", ["npm", "run", "t13:check"], package_json.parent)
+    return "node T13 check passed"
 
 
 def main() -> int:
-    pythonpath = str(ROOT / "reference/python")
-    node_available = shutil.which("node") is not None
-    node_script = ROOT / "reference/js/run_t13.mjs"
-
     steps = [
-        Step(
-            name="Validate schemas",
-            cmd=["python", "reference/cli/pca_cli.py", "validate-schemas"],
-            env={"PYTHONPATH": pythonpath},
-        ),
-        Step(
-            name="Run vectors",
-            cmd=["python", "reference/cli/pca_cli.py", "run-vectors"],
-            env={"PYTHONPATH": pythonpath},
-        ),
-        Step(
-            name="Python tests",
-            cmd=["python", "-m", "pytest", "-q"],
-            cwd=ROOT / "reference/python",
-        ),
-        Step(
-            name="Ruff lint",
-            cmd=["ruff", "check", "."],
-            cwd=ROOT / "reference/python",
-        ),
+        ("validate-schemas", validate_schemas),
+        ("run-vectors", run_vectors),
+        ("pytest", run_pytest),
+        ("ruff", run_ruff),
+        ("node-t13-check", run_node_t13_check),
     ]
 
-    node_skip_reason = ""
-    if not node_available:
-        node_skip_reason = "node is not available on PATH"
-    elif not node_script.exists():
-        node_skip_reason = f"{node_script.relative_to(ROOT)} not found"
+    summary: list[StepResult] = []
+    for name, step in steps:
+        print(f"\n=== {name} ===")
+        try:
+            detail = step()
+        except Exception as exc:  # noqa: BLE001
+            summary.append(StepResult(name=name, status="FAIL", detail=str(exc)))
+            print(f"✖ {name}: {exc}")
+            print("\nFinal summary:")
+            for item in summary:
+                print(f"- [{item.status}] {item.name}: {item.detail}")
+            return 1
 
-    steps.append(
-        Step(
-            name="Node T13 runner",
-            cmd=["node", "reference/js/run_t13.mjs"],
-            optional=True,
-            skip_reason=node_skip_reason,
-        )
-    )
+        status = "SKIP" if detail.startswith("skipped") else "OK"
+        summary.append(StepResult(name=name, status=status, detail=detail))
+        icon = "↷" if status == "SKIP" else "✔"
+        print(f"{icon} {name}: {detail}")
 
-    results = [run_step(step) for step in steps]
-
-    print("\n=== doctor summary ===")
-    for result in results:
-        print(f"{result.status:>4} | {result.step.name}")
-
-    has_failures = any(result.status == "FAIL" for result in results)
-    return 1 if has_failures else 0
+    print("\nFinal summary:")
+    for item in summary:
+        print(f"- [{item.status}] {item.name}: {item.detail}")
+    return 0
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    raise SystemExit(main())
