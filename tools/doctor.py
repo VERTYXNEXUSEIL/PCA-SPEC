@@ -80,7 +80,6 @@ def run_vectors() -> str:
 
         count += 1
     return f"{count} vectors matched expected outcomes"
-
 def run_pytest() -> str:
     _run_subprocess("pytest", ["pytest", "-q"], PYTHON_DIR)
     return "pytest passed"
