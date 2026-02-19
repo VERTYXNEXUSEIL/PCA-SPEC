@@ -3,6 +3,8 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
+import pytest
+
 from pca.cert import build_pc_digest
 from pca.execute import execute_certified
 from pca.schemas import validate
@@ -56,3 +58,38 @@ def test_schema_validation() -> None:
         },
         "evidence_capsule.schema.json",
     )
+
+
+def test_schema_validation_rejects_additional_properties() -> None:
+    vec = load_vector(VECTORS / "T10_brs_gate.json")
+    invalid_step = dict(vec["pc"]["steps"][0])
+    invalid_step["unexpected"] = True
+
+    with pytest.raises(ValueError):
+        validate(invalid_step, "action_ir.schema.json")
+
+
+def test_schema_validation_rejects_invalid_date_format() -> None:
+    vec = load_vector(VECTORS / "T10_brs_gate.json")
+    invalid_constraints = {
+        "version_id": vec["pc"]["constraints_version_id"],
+        "effective_time": {
+            "not_before": "2024-01-01",
+            "not_after": vec["pc"]["effective_time"]["not_after"],
+        },
+        "payload": {"allow": ["transfer"]},
+        "digest": vec["pc"]["constraints_digest"],
+    }
+
+    with pytest.raises(ValueError):
+        validate(invalid_constraints, "constraints.schema.json")
+
+
+def test_schema_validation_rejects_invalid_digest_pattern() -> None:
+    invalid_capsule = {
+        "capsule_version": "1.0",
+        "proofs": [{"type": "test", "digest": "xyz"}],
+    }
+
+    with pytest.raises(ValueError):
+        validate(invalid_capsule, "evidence_capsule.schema.json")
