@@ -56,3 +56,34 @@ def test_schema_validation() -> None:
         },
         "evidence_capsule.schema.json",
     )
+
+
+def test_schema_regression_additional_properties_pattern_and_ref() -> None:
+    vec = load_vector(VECTORS / "T10_brs_gate.json")
+
+    pc_extra = json.loads(json.dumps(vec["pc"]))
+    pc_extra["unexpected"] = True
+    try:
+        validate(pc_extra, "pc.schema.json")
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("Expected additionalProperties=false validation failure")
+
+    pc_bad_pattern = json.loads(json.dumps(vec["pc"]))
+    pc_bad_pattern["constraints_digest"] = "invalid-digest"
+    try:
+        validate(pc_bad_pattern, "pc.schema.json")
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("Expected pattern validation failure")
+
+    pc_bad_ref = json.loads(json.dumps(vec["pc"]))
+    pc_bad_ref["steps"][0]["required_capabilities"] = "not-an-array"
+    try:
+        validate(pc_bad_ref, "pc.schema.json")
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("Expected $ref validation failure for action_ir schema")
