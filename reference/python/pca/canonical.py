@@ -37,7 +37,7 @@ def prune_optional_none(data: dict[str, Any], schema: dict[str, Any]) -> dict[st
             out[key] = prune_optional_none(value, prop_schema)
         else:
             out[key] = value
-    
+
     return out
 
 
