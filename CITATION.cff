@@ -8,7 +8,4 @@ authors:
 version: "1.0.0"
 date-released: "2026-02-17"
 repository-code: "https://github.com/example/pca-spec"
-identifiers:
-  - type: doi
-    value: "10.0000/placeholder"
 license: "Apache-2.0 AND CC-BY-4.0"
