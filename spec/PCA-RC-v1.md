@@ -10,8 +10,7 @@
 
 - `RC_OK`: Verification and execution checks passed.
 - `RC_PC_REPLAY`: PC replay detected.
-- `RC_DOMAIN_SEPARATION`: Domain-separated digest mismatch.
-- `RC_CONSTRAINTS_MISMATCH`: Constraints digest or version mismatch.
+- `RC_INTEGRITY_MISMATCH`: Deterministic integrity failure (expected digest/domain separation mismatch or constraints digest/version mismatch).
 - `RC_REASON_UNSTABLE`: Non-deterministic reason generation detected.
 - `RC_TOCTOU`: Time-of-check/time-of-use drift violation.
 - `RC_EFFECTIVE_TIME`: Out-of-window effective time.
@@ -21,3 +20,9 @@
 - `RC_OOD_TRIPWIRE`: Out-of-distribution tripwire triggered.
 - `RC_DISCLOSURE_BUDGET`: Disclosure budget exceeded.
 - `RC_UNKNOWN`: Fallback for uncategorized deterministic failure.
+
+## Integrity and execution
+
+- Verify-stage integrity failures MUST return `RC_INTEGRITY_MISMATCH`.
+- This includes domain-separated digest mismatches and constraints digest/version mismatches.
+- Deterministic integrity mismatch inputs MUST always produce the same reason code.
