@@ -5,8 +5,8 @@ Defines conformance tests T1-T13.
 ## Test set
 
 - **T1 PC replay**: repeated nonce/session MUST trigger `RC_PC_REPLAY`.
-- **T2 Domain separation**: wrong hash label MUST trigger `RC_DOMAIN_SEPARATION`.
-- **T3 Constraints mismatch**: mismatched constraints digest/version MUST trigger `RC_CONSTRAINTS_MISMATCH`.
+- **T2 Domain separation**: wrong hash label MUST trigger `RC_INTEGRITY_MISMATCH`.
+- **T3 Constraints mismatch**: mismatched constraints digest/version MUST trigger `RC_INTEGRITY_MISMATCH`.
 - **T4 Reason stability**: identical failing inputs MUST produce same reason code.
 - **T5 TOCTOU**: state drift between check/use MUST trigger `RC_TOCTOU`.
 - **T6 Effective time**: out-of-window execution MUST trigger `RC_EFFECTIVE_TIME`.
@@ -16,7 +16,7 @@ Defines conformance tests T1-T13.
 - **T10 BRS gate**: threshold exceedance MUST trigger `RC_BRS_GATE`.
 - **T11 OOD tripwire**: OOD flag MUST trigger `RC_OOD_TRIPWIRE`.
 - **T12 Disclosure budget**: budget exceedance MUST trigger `RC_DISCLOSURE_BUDGET`.
-- **T13 Positive path**: valid execution MUST return `EXECUTE` + `RC_OK`.
+- **T13 Cross-implementation determinism**: stable integer/string inputs MUST yield the same `expected_pc_digest` and `RC_OK` across conforming implementations.
 
 ## Acceptance criteria
 

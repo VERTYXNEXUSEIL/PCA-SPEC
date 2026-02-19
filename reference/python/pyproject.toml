@@ -7,10 +7,10 @@ name = "pca-reference"
 version = "1.0.0"
 description = "Reference implementation for PCA/CAE"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = ["jsonschema>=4.0.0", "referencing>=0.30.0"]
 
 [project.optional-dependencies]
-dev = ["pytest>=8.0.0", "ruff>=0.6.0"]
+dev = ["pytest>=8.0.0", "ruff>=0.6.0", "jsonschema>=4.0.0"]
 
 [tool.setuptools.packages.find]
 where = ["."]
