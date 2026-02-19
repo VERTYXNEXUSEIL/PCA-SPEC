@@ -7,8 +7,9 @@ Proof-Carrying Autonomy (PCA) / Certified Agentic Execution (CAE) is a product-n
 This repository publicly discloses PCA/CAE standard and reference implementation.
 
 - **Primary Author/Inventor: ARKADIUSZ LESZO**
-- First public release timestamp: `2026-02-17T21:34:ssZ` (placeholder)
-- First signed release tag: `v1.0.0` (placeholder for signature identity)
+- First public release timestamp: `2026-02-17T21:34:ssZ`
+- First signed release tag: `v1.0.0`
+  
 
 ## What is in this repository
 
