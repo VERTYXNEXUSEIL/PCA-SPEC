@@ -35,7 +35,7 @@
   },
   "expected": {
     "decision": "FALLBACK",
-    "reason_code": "RC_CONSTRAINTS_MISMATCH"
+    "reason_code": "INTEGRITY_MISMATCH"
   },
   "expected_pc_digest": "80f682a2513536688af297e57c1a5785260d6c1a1a78416e8abae006d53fc8b3"
 }
