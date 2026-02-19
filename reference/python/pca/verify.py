@@ -3,7 +3,7 @@ from __future__ import annotations
 from datetime import datetime
 
 from .cert import build_pc_digest
-from .reason_codes import RC_CONSTRAINTS_MISMATCH, RC_DOMAIN_SEPARATION, RC_EFFECTIVE_TIME, RC_OK
+from .reason_codes import RC_EFFECTIVE_TIME, RC_INTEGRITY_MISMATCH, RC_OK
 
 
 def _parse_time(ts: str) -> datetime:
@@ -13,12 +13,12 @@ def _parse_time(ts: str) -> datetime:
 def verify_pc(pc: dict, runtime: dict) -> tuple[str, str]:
     recomputed = build_pc_digest(pc)
     if runtime.get("expected_pc_digest") and runtime["expected_pc_digest"] != recomputed:
-        return "FALLBACK", RC_DOMAIN_SEPARATION
+        return "FALLBACK", RC_INTEGRITY_MISMATCH
 
     if runtime.get("constraints_version_id") != pc.get("constraints_version_id"):
-        return "FALLBACK", RC_CONSTRAINTS_MISMATCH
+        return "FALLBACK", RC_INTEGRITY_MISMATCH
     if runtime.get("constraints_digest") != pc.get("constraints_digest"):
-        return "FALLBACK", RC_CONSTRAINTS_MISMATCH
+        return "FALLBACK", RC_INTEGRITY_MISMATCH
 
     now = _parse_time(runtime["now"])
     nb = _parse_time(pc["effective_time"]["not_before"])
