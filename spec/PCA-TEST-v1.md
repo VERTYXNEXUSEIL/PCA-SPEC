@@ -27,5 +27,6 @@ This document defines normative conformance tests T1-T13.
 ## Acceptance criteria
 
 - Bronze: 100% pass on mandatory Bronze subset (T1-T6, T8).
+  - *Note: T7 is excluded from Bronze conformance as test vectors are not yet implemented. Once test vectors are available, T7 will be added to Bronze requirements.*
 - Silver: 100% pass on T1-T10.
 - Gold: 100% pass on all T1-T13.
