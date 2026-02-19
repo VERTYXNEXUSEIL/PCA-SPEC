@@ -34,6 +34,13 @@ def prune_optional_none(data: dict[str, Any], schema: dict[str, Any]) -> dict[st
 
         prop_schema = props[key]
         if isinstance(value, dict) and prop_schema.get("type") == "object":
+            out[key] = prune_optional_none(value, prop_schema)
+        else:
+            out[key] = value
+
+    return out
+
+
 def canonical_json_bytes(data: Any) -> bytes:
     normalized = _normalize_numbers(data)
     payload = json.dumps(normalized, sort_keys=True, separators=(",", ":"), allow_nan=False)
