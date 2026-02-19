@@ -16,7 +16,7 @@ Defines conformance tests T1-T13.
 - **T10 BRS gate**: threshold exceedance MUST trigger `RC_BRS_GATE`.
 - **T11 OOD tripwire**: OOD flag MUST trigger `RC_OOD_TRIPWIRE`.
 - **T12 Disclosure budget**: budget exceedance MUST trigger `RC_DISCLOSURE_BUDGET`.
-- **T13 Positive path**: valid execution MUST return `EXECUTE` + `RC_OK`.
+- **T13 Cross-implementation determinism**: stable integer/string inputs MUST yield the same `expected_pc_digest` and `RC_OK` across conforming implementations.
 
 ## Acceptance criteria
 

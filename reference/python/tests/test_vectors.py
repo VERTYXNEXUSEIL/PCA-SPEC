@@ -18,7 +18,11 @@ def load_vector(path: Path) -> dict:
 
 def test_vector_decisions_and_digests() -> None:
     seen: set[str] = set()
-    for path in sorted(VECTORS.glob("T*.json")):
+    vector_paths = sorted(VECTORS.glob("T*.json"))
+    vector_ids = {path.stem for path in vector_paths}
+    assert "T13_cross_impl_determinism" in vector_ids
+
+    for path in vector_paths:
         vec = load_vector(path)
         assert build_pc_digest(vec["pc"]) == vec["expected_pc_digest"]
 

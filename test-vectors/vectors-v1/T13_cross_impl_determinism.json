@@ -1,0 +1,52 @@
+{
+  "test_id": "T13_cross_impl_determinism",
+  "pc": {
+    "pc_version": "1.0",
+    "pc_id": "pc-013",
+    "issued_at": "2026-02-17T00:00:00Z",
+    "planner_id": "planner.ref",
+    "constraints_version_id": "cons-v1",
+    "constraints_digest": "a6e9c460a6f6d9bda9b3b2e6d909437a32b7629dede0e897bc382a24d86b499e",
+    "effective_time": {
+      "not_before": "2026-02-17T00:00:00Z",
+      "not_after": "2026-12-31T23:59:59Z"
+    },
+    "plan_digest": "315737b5a8f57672f3f5267dfbacf5f2e36f0b06a11ff65f14afeb8b9de53f84",
+    "merkle_root": "8e827557cf8fd8e8426946ca173100a7da6af3a30ebb95aa8ba3f1fd518e2aad",
+    "steps": [
+      {
+        "action_type": "transfer",
+        "parameters": {
+          "to": "B2",
+          "amount": 5,
+          "memo": "invoice-13"
+        },
+        "required_capabilities": [
+          "ledger.write"
+        ]
+      },
+      {
+        "action_type": "tag",
+        "parameters": {
+          "label": "compliance",
+          "priority": 1
+        },
+        "required_capabilities": [
+          "ledger.read"
+        ]
+      }
+    ],
+    "nonce": "T13_cross_impl_determinism-nonce"
+  },
+  "runtime": {
+    "expected_pc_digest": "1b947e6e789d67a47eb03c5c6147de3b2eb4c38f7ec34e34a4f5d5ac5ee78a44",
+    "constraints_version_id": "cons-v1",
+    "constraints_digest": "a6e9c460a6f6d9bda9b3b2e6d909437a32b7629dede0e897bc382a24d86b499e",
+    "now": "2026-03-01T00:00:00Z"
+  },
+  "expected": {
+    "decision": "EXECUTE",
+    "reason_code": "RC_OK"
+  },
+  "expected_pc_digest": "1b947e6e789d67a47eb03c5c6147de3b2eb4c38f7ec34e34a4f5d5ac5ee78a44"
+}
