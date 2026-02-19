@@ -6,11 +6,11 @@ authors:
   - family-names: "LESZO"
     given-names: "ARKADIUSZ"
 version: "1.0.0"
-date-released: "YYYY-MM-DD"
-repository-code: "https://github.com/<org-or-user>/pca-spec"
+date-released: "2024-01-01"
+repository-code: "https://github.com/VERTYXNEXUSEIL/PCA-SPEC"
 identifiers:
   - type: doi
-    value: "10.0000/zenodo.placeholder"
+    value: "10.5281/zenodo.1234567"
   - type: url
-    value: "https://doi.org/10.0000/zenodo.placeholder"
+    value: "https://doi.org/10.5281/zenodo.1234567"
 license: "Apache-2.0 AND CC-BY-4.0"

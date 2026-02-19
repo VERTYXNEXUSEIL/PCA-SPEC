@@ -1,0 +1,82 @@
+{
+  "test_id": "T7_optional_field_omission",
+  "inputs": {
+    "constraints_version_id": "cons-v1",
+    "constraints_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "effective_time": {
+      "not_before": "2026-01-01T00:00:00Z",
+      "not_after": "2026-12-31T23:59:59Z"
+    },
+    "steps": [
+      {
+        "S0": {
+          "x": 1
+        },
+        "G": {
+          "x": 2
+        },
+        "C": {
+          "limit": 3
+        },
+        "P": {
+          "domain": "ops"
+        },
+        "CFG": {
+          "temp": 0.1
+        },
+        "action_type": "set_x",
+        "parameters": {
+          "value": 2
+        },
+        "required_capabilities": [
+          "kv.write"
+        ],
+        "predicted_effect": null,
+        "egress_class": null
+      }
+    ]
+  },
+  "pc": {
+    "pc_version": "1.0",
+    "hash_function_id": "SHA-256",
+    "canonical_encoding_id": "JCS-PCA-v1",
+    "goal_digest": "ab8aa2365d28754dd1f54f6d5ee748641011843d5561447fd5f19f2be8ca8065",
+    "initial_state_digest": "83dbb1f35b5a0648729f6f42bd57852c1e572595c72558dde090d322c6a0fc82",
+    "constraints_version_id": "cons-v1",
+    "constraints_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "effective_time": {
+      "not_before": "2026-01-01T00:00:00Z",
+      "not_after": "2026-12-31T23:59:59Z"
+    },
+    "plan_digest": "204b7171782b1e3d3ab7ad8ee1da0ce4e54fefbb6c40fd765b5340d81f227ac7",
+    "merkle_root": "a9dfe67f00acad4082dbb493d0925c123bf864201415eb8f5ba652b9904b73c9",
+    "planner_config_digest": "a7e8854e153be6a80a81d3930bc88bd4b2b3bffaa4203ac0d47150ed143cfa4f",
+    "action_ir_digest": "4a98bfa753b88e0b3a4662cee6c02b3c826dfa5803ba3aa7b255a62591e24c0f",
+    "decision": "ALLOW",
+    "decision_reason_code": "VERIFY_ALLOW",
+    "evidence_capsule": {
+      "capsule_version": "1.0",
+      "proofs": [
+        {
+          "proof_id": "plan-step-0",
+          "proof_digest": "a9dfe67f00acad4082dbb493d0925c123bf864201415eb8f5ba652b9904b73c9",
+          "proof_type": "STEP_DIGEST",
+          "retention": "p7y"
+        }
+      ]
+    },
+    "pc_digest": "35a20dacebde14c91e8262467fa778be8e171e9a02622fafb0f190055dc2651b"
+  },
+  "runtime": {
+    "expected_pc_digest": "35a20dacebde14c91e8262467fa778be8e171e9a02622fafb0f190055dc2651b",
+    "constraints_version_id": "cons-v1",
+    "constraints_digest": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "now": "2026-06-01T00:00:00Z"
+  },
+  "expected_pc_digest": "35a20dacebde14c91e8262467fa778be8e171e9a02622fafb0f190055dc2651b",
+  "expected": {
+    "decision": "ALLOW",
+    "reason_code": "VERIFY_ALLOW"
+  },
+  "expected_plan_digest": "204b7171782b1e3d3ab7ad8ee1da0ce4e54fefbb6c40fd765b5340d81f227ac7"
+}

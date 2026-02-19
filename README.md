@@ -8,7 +8,7 @@ This repository publicly discloses PCA/CAE standard and reference implementation
 
 - Primary Author/Inventor: ARKADIUSZ LESZO
 - First public release: v1.0.0
-- Release timestamp (UTC): <YYYY-MM-DDTHH:MM:SSZ>
+- Release timestamp (UTC): to be set to the actual tag creation time in `YYYY-MM-DDTHH:MM:SSZ` format (update this line after creating the signed tag)
 - Signed tag: v1.0.0 (verified signature)
 - Release artifacts: spec bundle + SHA256SUMS + MANIFEST.json + BUILDINFO.json
 - Disclaimer: no legal advice
