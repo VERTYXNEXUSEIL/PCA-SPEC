@@ -6,7 +6,7 @@ authors:
   - family-names: "LESZO"
     given-names: "ARKADIUSZ"
 version: "1.0.0"
-date-released: "YYYY-MM-DD"
+date-released: "2026-02-17"
 repository-code: "https://example.invalid/pca-spec"
 identifiers:
   - type: doi
