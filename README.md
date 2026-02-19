@@ -39,6 +39,12 @@ python -m pip install -e .[dev]
 pytest -q
 ```
 
+Full local gate (schemas, vectors, pytest, ruff, optional Node T13):
+
+```bash
+python tools/doctor.py
+```
+
 ## How to Verify Integrity
 
 1. **Verify tag signature**
