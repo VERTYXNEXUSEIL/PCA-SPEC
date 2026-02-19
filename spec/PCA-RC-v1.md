@@ -43,6 +43,7 @@ Identical canonical inputs MUST produce identical verdict and identical `reason_
 
 ### Integrity and execution
 - `INTEGRITY_FAIL`
+- `INTEGRITY_MISMATCH`
 - `EXEC_DENY_GATE`
 - `EXEC_FALLBACK_SAFE_MODE`
 - `AUDIT_INCOMPLETE`

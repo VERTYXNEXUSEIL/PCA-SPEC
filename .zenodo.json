@@ -16,12 +16,12 @@
   ],
   "related_identifiers": [
     {
-      "identifier": "https://github.com/pca-spec/pca-spec",
+      "identifier": "https://github.com/VERTYXNEXUSEIL/PCA-SPEC",
       "relation": "isSupplementTo",
       "scheme": "url"
     },
     {
-      "identifier": "https://github.com/pca-spec/pca-spec/releases/tag/v1.0.0",
+      "identifier": "https://github.com/VERTYXNEXUSEIL/PCA-SPEC/releases/tag/v1.0.0",
       "relation": "isVersionOf",
       "scheme": "url"
     }
