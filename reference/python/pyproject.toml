@@ -16,6 +16,11 @@ dev = [
   "jsonschema>=4.0.0",
 ]
 
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["pca*"]
+exclude = ["jsonschema*"]
+
 [tool.ruff]
 line-length = 100
 
