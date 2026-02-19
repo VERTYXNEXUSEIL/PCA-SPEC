@@ -1,7 +1,10 @@
 from __future__ import annotations
 
+import json
 from copy import deepcopy
+from pathlib import Path
 
+from .canonical import prune_optional_none
 from .hashing import ds_hash
 
 
@@ -52,4 +55,12 @@ def build_merkle_root(step_digests: list[str]) -> str:
 def build_pc_digest(pc: dict) -> str:
     copy = deepcopy(pc)
     copy.pop("signature", None)
+    
+    # Load PC schema to properly prune optional None fields
+    schema_path = Path(__file__).resolve().parents[3] / "schemas" / "pc.schema.json"
+    pc_schema = json.loads(schema_path.read_text())
+    
+    # Prune optional fields that are None
+    copy = prune_optional_none(copy, pc_schema)
+    
     return ds_hash(HASH_LABELS["pc"], copy)
