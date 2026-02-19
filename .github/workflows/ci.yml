@@ -36,9 +36,9 @@ jobs:
       - name: Build and verify release manifest
         if: runner.os == 'Linux'
         run: |
-          python tools/build_release.py --tag ci-${GITHUB_SHA}
+          python tools/build_release.py --tag "ci-${{ github.sha }}"
           python tools/verify_manifest.py --manifest dist/MANIFEST.json
-          python tools/verify_release_assets.py --tag ci-${GITHUB_SHA}
+          python tools/verify_release_assets.py --tag "ci-${{ github.sha }}"
       - name: Reproducibility check (same machine)
         if: runner.os == 'Linux'
         run: |
@@ -46,8 +46,8 @@ jobs:
           cp dist/pca-spec-repro-test.zip /tmp/repro1.zip
           python tools/build_release.py --tag repro-test
           cp dist/pca-spec-repro-test.zip /tmp/repro2.zip
-          sha1=$(sha256sum /tmp/repro1.zip | awk "{print $1}")
-          sha2=$(sha256sum /tmp/repro2.zip | awk "{print $1}")
+          sha1=$(sha256sum /tmp/repro1.zip | awk '{print $1}')
+          sha2=$(sha256sum /tmp/repro2.zip | awk '{print $1}')
           test "$sha1" = "$sha2"
 
   t13-node:
