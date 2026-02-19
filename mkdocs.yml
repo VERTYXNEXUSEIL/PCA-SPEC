@@ -1,0 +1,23 @@
+site_name: PCA/CAE Standard
+site_description: Proof-Carrying Autonomy / Certified Agentic Execution
+nav:
+  - Home: README.md
+  - Spec:
+      - PCA-SPEC-v1.0: spec/PCA-SPEC-v1.0.md
+      - PCA-RC-v1: spec/PCA-RC-v1.md
+      - PCA-TEST-v1: spec/PCA-TEST-v1.md
+  - Adoption:
+      - Procurement Language: adoption/PROCUREMENT_LANGUAGE.md
+      - Integrity Verification: adoption/INTEGRITY_VERIFICATION.md
+      - Threat Model: adoption/THREATMODEL.md
+  - Certification:
+      - CAE Mark Guidelines: cert/CAE_MARK_GUIDELINES.md
+      - Conformance Checklists: cert/CONFORMANCE_CHECKLISTS.md
+      - Test Report Template: cert/TEST_REPORT_TEMPLATE.md
+  - Profiles:
+      - Baseline: profiles/PROFILE_BASELINE.md
+      - Government Grade: profiles/PROFILE_GOVERNMENT_GRADE.md
+  - Archival Runbook: docs/ARCHIVE_RUNBOOK.md
+markdown_extensions:
+  - toc:
+      permalink: true

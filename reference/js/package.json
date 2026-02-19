@@ -1,0 +1,9 @@
+{
+  "name": "pca-reference-js",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "t13": "node run_t13.mjs"
+  }
+}

@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://example.invalid/pca/pc.schema.json",
+  "title": "Plan Certificate (PC) v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "pc_version",
+    "hash_function_id",
+    "canonical_encoding_id",
+    "goal_digest",
+    "initial_state_digest",
+    "constraints_version_id",
+    "constraints_digest",
+    "effective_time",
+    "plan_digest",
+    "decision",
+    "decision_reason_code",
+    "evidence_capsule"
+  ],
+  "properties": {
+    "pc_version": {
+      "type": "string",
+      "const": "1.0"
+    },
+    "hash_function_id": {
+      "type": "string",
+      "const": "SHA-256"
+    },
+    "canonical_encoding_id": {
+      "type": "string",
+      "const": "JCS-PCA-v1"
+    },
+    "goal_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "initial_state_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "constraints_version_id": {
+      "type": "string"
+    },
+    "constraints_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "effective_time": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "not_before",
+        "not_after"
+      ],
+      "properties": {
+        "not_before": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "not_after": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    },
+    "plan_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "decision": {
+      "type": "string",
+      "enum": [
+        "ALLOW",
+        "DENY",
+        "ESCALATE",
+        "FALLBACK"
+      ]
+    },
+    "decision_reason_code": {
+      "type": "string"
+    },
+    "evidence_capsule": {
+      "$ref": "evidence_capsule.schema.json"
+    },
+    "policy_version_id": {
+      "type": "string"
+    },
+    "policy_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "action_ir_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "brs_profile_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "uncertainty_profile_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "output_policy_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "disclosure_budget_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "planner_config_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "signatures": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "attestation_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "test_suite_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "merkle_root": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "pc_digest": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}

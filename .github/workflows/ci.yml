@@ -1,0 +1,62 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  python:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install tooling
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install -e reference/python[dev]
+      - name: Lint
+        run: |
+          cd reference/python
+          ruff check .
+      - name: Unit tests
+        run: |
+          cd reference/python
+          python -m pytest -q
+      - name: Validate schemas (CLI)
+        run: |
+          python reference/cli/pca_cli.py validate-schemas
+      - name: Run vector suite (CLI)
+        run: |
+          python reference/cli/pca_cli.py run-vectors
+      - name: Build and verify release manifest
+        if: runner.os == 'Linux'
+        run: |
+          python tools/build_release.py --tag ci-${GITHUB_SHA}
+          python tools/verify_manifest.py --manifest dist/MANIFEST.json
+          python tools/verify_release_assets.py --tag ci-${GITHUB_SHA}
+      - name: Reproducibility check (same machine)
+        if: runner.os == 'Linux'
+        run: |
+          python tools/build_release.py --tag repro-test
+          cp dist/pca-spec-repro-test.zip /tmp/repro1.zip
+          python tools/build_release.py --tag repro-test
+          cp dist/pca-spec-repro-test.zip /tmp/repro2.zip
+          sha1=$(sha256sum /tmp/repro1.zip | awk "{print $1}")
+          sha2=$(sha256sum /tmp/repro2.zip | awk "{print $1}")
+          test "$sha1" = "$sha2"
+
+  t13-node:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Cross-implementation determinism (T13)
+        run: |
+          node reference/js/run_t13.mjs

@@ -1,0 +1,41 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Build release artifacts
+        run: |
+          python tools/build_release.py --tag ${GITHUB_REF_NAME}
+      - name: Verify release artifacts
+        run: |
+          python tools/verify_release_assets.py --tag ${GITHUB_REF_NAME}
+      - name: Upload artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: pca-release-${{ github.ref_name }}
+          path: |
+            dist/pca-spec-${{ github.ref_name }}.zip
+            dist/SHA256SUMS
+            dist/MANIFEST.json
+            dist/BUILDINFO.json
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          body_path: releases/RELEASE_NOTES_v1.0.0.md
+          files: |
+            dist/pca-spec-${{ github.ref_name }}.zip
+            dist/SHA256SUMS
+            dist/MANIFEST.json
+            dist/BUILDINFO.json

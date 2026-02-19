@@ -1,0 +1,26 @@
+name: Provenance
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ main ]
+
+jobs:
+  provenance:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Generate provenance artifacts
+        run: |
+          python tools/build_release.py --tag provenance-${GITHUB_SHA}
+      - name: Upload provenance artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: provenance
+          path: |
+            dist/SHA256SUMS
+            dist/MANIFEST.json
+            dist/BUILDINFO.json

@@ -1,0 +1,23 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pca-reference"
+version = "1.0.0"
+description = "PCA/CAE reference implementation"
+requires-python = ">=3.10"
+dependencies = ["jsonschema>=4.0.0"]
+
+[project.optional-dependencies]
+dev = [
+  "pytest>=7.0.0",
+  "ruff>=0.5.0",
+  "jsonschema>=4.0.0",
+]
+
+[tool.ruff]
+line-length = 100
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
